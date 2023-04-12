@@ -27,6 +27,11 @@
 
         function handleCredentialResponse(response) {
             console.log("token: " + response.credential);
+
+            const token = response.credential
+            const [header, payload, signature] = token.split('.');
+            const decodedPayload = JSON.parse(atob(payload));
+            console.log(decodedPayload);
         }
 
         /**
