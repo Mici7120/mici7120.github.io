@@ -1,10 +1,203 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Andrés Ramírez Medina">
+    <link href="http://www.univalle.edu.co/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
+
+    <title>AppComisiones - Universidad del Valle</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+
+        function onFailure(error) {
+            // Se ha producido un error al iniciar sesión con Google
+            console.error(error);
+        }
+
+        function handleCredentialResponse(response) {
+            console.log("token: " + response.credential);
+        }
+
+        /**
+         * Listener method for when the user changes.
+         *
+         * @param {GoogleUser} user the updated user.
+         */
+        var userChanged = function (user) {
+            console.log('user changed...');
+            console.log('User now: ', user);
+            googleUser = user;
+            updateGoogleUser();
+        };
+        /**
+         * Updates the properties in the Google User table using the current user.
+         */
+        var updateGoogleUser = function () {
+
+            if (googleUser) {
+                console.log('updating google user...');
+                if (googleUser.isSignedIn()) {
+                    validaInicio();
+                }
+
+                //                    document.getElementById('user-id').innerText = googleUser.getId();
+                //                    document.getElementById('user-scopes').innerText = googleUser.getGrantedScopes();
+                //                    document.getElementById('auth-response').innerText = JSON.stringify(googleUser.getAuthResponse(), undefined, 2);
+
+            } else {
+                console.log('updating google user......NO USER');
+                //                    document.getElementById('user-id').innerText = '--';
+                //                    document.getElementById('user-scopes').innerText = '--';
+                //                    document.getElementById('auth-response').innerText = '--';
+            }
+        };
+
+
+        function validaInicio() {
+
+            //if (googleUser.isSignedIn()) {
+            //console.log('googleUser.getAuthResponse().access_token: ', googleUser.getAuthResponse().access_token);
+            //console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
+            //var email = googleUser.getBasicProfile().getEmail();
+            console.log("Google email");
+            //var acces_token = googleUser.getAuthResponse().access_token;
+            $('#botonIngresar').show(); //mostrar
+            $('#botonDesconectar').show();
+            $('#idUsuario').show();
+            $('#idUsuario').val(email);
+        }
+
+    </script>
+    <style type="text/css">
+        body {
+            background-color: #1a1d3a;
+            background: linear-gradient(rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0) 100%),
+                url("AppComisiones/images/rayas.png"),
+                url("AppComisiones/images/fondo2.jpg") no-repeat fixed,
+                linear-gradient(#14163f 50%, #14163f 100%);
+            background-size: auto, 200px 200px, 100% auto, auto;
+            background-position: 0 0, 0 0, center 0, 0 0;
+        }
+
+        #contenedor {
+            width: 40%;
+            margin: 10% auto;
+        }
+    </style>
+</head>
+
 <body>
+    <div class="container" id="contenedor">
+        <div class="row">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">AppComisiones</h3>
+                </div>
+                <div class="panel-body">
+                    <form role="form" id="form" name="form" method="POST" enctype="multipart/form-data">
+                        <fieldset>
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Usuario" id="idUsuario"
+                                    name="idUsuario" style="display: none;" required="" readonly="">
+                            </div>
+                            <!----->
+                            <input type="hidden" id="nombreapellido" name="nombreapellido" />
+                            <input type="hidden" id="perfil" name="perfil" />
+                            <input type="hidden" id="idtercero" name="idtercero" />
+                            <input type="hidden" id="token" name="token" />
+                            <input type="hidden" id="userId" name="userId" />
+                            <!----->
 
-<h1>My First Github Page</h1>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-danger btn-lg btn-block" id="botonDesconectar"
+                                    name="botonDesconectar" style="display: none;">
+                                    <i class="glyphicon glyphicon-log-out"></i> Desconectar
+                                </button>
+                                <div id="g_id_onload"
+                                    data-client_id="852839185464-qhpnvu5a310frt8d8v02dvsucc8tgg78.apps.googleusercontent.com"
+                                    data-callback="handleCredentialResponse" data-auto_prompt="false"
+                                    data-referrerpolicy="no-referrer-when-downgrade"></div>
+                                <!-- <div class="g_id_signin" data-type="standard" data-referrerpolicy="no-referrer-when-downgrade"></div> -->
+                                <button type="button" class="btn btn-danger btn-lg btn-block" id="botonIngresar">
+                                    Login Google
+                                </button>
+                            </div>
+                </div>
+            </div>
+            <div id="ERROR" class="alert alert-danger alert-dismissable" style="display: none;">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <span id="spanERROR" name="spanERROR"></span>
+            </div>
+            </fieldset>
+            </form>
+        </div>
+    </div>
+    </div>
+    </div>
+    <p id="signed-in-cell" style="color: white"></p>
+    <p id="curr-user-cell" style="color: red"></p>
+    <p id="user-id" style="color: white"></p>
+    <p id="user-scopes" style="color: white"></p>
+    <p id="auth-response" style="color: white"></p>
 
-<p>Hola mundo</p>
+    <script>
+        $('#botonIngresar').click(function () {
+            console.log("Click")
+            try {
+                console.log("Initialize")
+                window.google.accounts.id.initialize({
+                    client_id: "852839185464-qhpnvu5a310frt8d8v02dvsucc8tgg78.apps.googleusercontent.com",
+                    callback: handleResponse,
+                });
+                window.google.accounts.id.prompt((notification) => {
+                    if (notification.isNotDisplayed()) {
+                        throw new Error('Try to clear the cookies or try again later!');
+                    }
+                    if (
+                        notification.isSkippedMoment() ||
+                        notification.isDismissedMoment()
+                    ) {
+                        console.log("Disable")
+                    }
+                });
+            } catch (error) {
+                dispatch({
+                    type: 'UPDATE_ALERT',
+                    payload: { open: true, severity: 'error', message: error.message },
+                });
+                console.log(error);
+            }
+        });
+        const handleResponse = (response) => {
+            const token = response.credential;
+            const decodedToken = jwtDecode(token);
+            const { sub: id, email, name, picture: photoURL } = decodedToken;
+            // dispatch({
+            //     type: 'UPDATE_USER',
+            //     payload: { id, email, name, photoURL, token, google: true },
+            // });
+            // dispatch({ type: 'CLOSE_LOGIN' });
+        };
+
+        $('#botonDesconectar').click(function () {
+            console.log('botonDesconectar - click');
+            disconnectUser();
+        });
+
+    </script>
+
 
 </body>
+
 </html>
